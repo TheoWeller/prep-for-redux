@@ -4,52 +4,64 @@ import './index.css';
 import logo from './logo.svg';
 import './App.css';
 
+//moved description method to Header
+
+//moved state to App
+//moved increment to App
+//moved decrement to app
+
+//pass increment & decrement to Counter as callbacks
+//pass state to Header & render
+
 class App extends Component {
+  state = { count: 0 };
+
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  decrement = () => {
+    this.setState({ count: this.state.count - 1 });
+  };
+
   render() {
+    console.log("STATE", this.state.count);
     return (
       <div className="App">
-        <Header />
-        <Counter />
+        <Header state={this.state}/>
+        <Counter increment={this.increment} decrement={this.decrement} count={this.state.count}/>
       </div>
     );
   }
 }
 
 class Header extends Component {
+  renderDescription = (state) => {
+    const remainder = state.count % 5;
+    const upToNext = 5 - remainder;
+    return `The current count is less than ${state.count + upToNext}`;
+  };
+
   render() {
+    console.log("COUNTER PROPS", this.props);
     return (
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Welcome to React</h1>
+        <h1 className="App-title">{this.renderDescription(this.props.state)}</h1>
       </header>
     );
   }
 }
 
 class Counter extends Component {
-  state = { count: 0 };
-
-  increment = () => {
-    this.setState(prevState => ({ count: prevState.count + 1 }));
-  };
-
-  decrement = () => {
-    this.setState(prevState => ({ count: prevState.count - 1 }));
-  };
-
-  renderDescription = () => {
-    const remainder = this.state.count % 5;
-    const upToNext = 5 - remainder;
-    return `The current count is less than ${this.state.count + upToNext}`;
-  };
 
   render() {
     return (
       <div className="Counter">
-        <h1>{this.state.count}</h1>
-        <button onClick={this.decrement}> - </button>
-        <button onClick={this.increment}> + </button>
-        <h3>{this.renderDescription()}</h3>
+        <h1>{this.props.count}</h1>
+        <button onClick={this.props.decrement}> - </button>
+        <button onClick={this.props.increment}> + </button>
+        <h3></h3>
       </div>
     );
   }
